@@ -1,0 +1,14 @@
+{
+  "name": "n8n-browserless-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Scripts executed by n8n via SSH/docker exec",
+  "main": "browserlessTest.js",
+  "scripts": {
+    "deploy": "./deploy-n8n.sh",
+    "deploy:fast": "./deploy-n8n.sh --skip-install"
+  },
+  "dependencies": {
+    "playwright-core": "^1.59.0"
+  }
+}
