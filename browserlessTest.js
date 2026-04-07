@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { chromium } = require('playwright-core');
+import { chromium } from 'playwright-core';
 
 async function main() {
   const browser = await chromium.connectOverCDP('ws://playwright_engine:3000');

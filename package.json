@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "description": "Scripts executed by n8n via SSH/docker exec",
+  "type": "module",
   "main": "browserlessTest.js",
   "scripts": {
     "deploy": "./deploy-n8n.sh",
-    "deploy:fast": "./deploy-n8n.sh --skip-install"
+    "deploy:fast": "./deploy-n8n.sh --skip-install",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint . --fix"
+  },
+  "devDependencies": {
+    "oxlint": "1.59.0"
   },
   "dependencies": {
     "playwright-core": "^1.59.0"
