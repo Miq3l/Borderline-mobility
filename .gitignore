@@ -19,3 +19,15 @@ Thumbs.db
 
 # IDE/local settings
 .vscode/*.local
+
+# Playwright (if you add @playwright/test or local traces later)
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Test coverage
+coverage/
+
+# LibreOffice / temp locks (if you keep spreadsheets near the repo)
+.~lock.*

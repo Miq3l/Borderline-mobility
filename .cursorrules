@@ -1,0 +1,39 @@
+You are working in an n8n + Node.js project.
+
+Core behavior:
+- Before writing code, search existing nodes, helpers, shared utilities, and tests.
+- Reuse existing workflow and node patterns before introducing new abstractions.
+- If a new pattern is needed, propose location and naming before implementation.
+
+Stack defaults:
+- Runtime: Node.js (version defined by project/tooling).
+- Validation: Use Zod with a standard schema module for strict contracts at boundaries.
+- Linting/formatting: follow repo tooling (OxLint).
+- Testing: validate script behavior with Browserless/Playwright integration tests first; add Vitest for pure utility modules when introduced.
+
+Workflow guardrails:
+- Keep orchestration in n8n (webhook trigger, execution sequencing, retries).
+- Keep browser automation and reusable logic in Node scripts under the scripts workspace.
+- Avoid long inline code in n8n nodes when logic can be extracted into script files.
+
+Integration and reliability rules:
+- Be explicit about retries, idempotency, and error paths.
+- Handle target-site instability and rate limits with bounded retries/backoff.
+- Log enough context for debugging (step, target URL, failure class) without exposing secrets.
+
+Environment awareness:
+- Confirm target execution context before coding:
+  - Local editor machine (authoring/deploy command execution)
+  - Remote Docker host `192.168.0.43` (runtime)
+  - `n8n_server` container executing script calls
+  - `playwright_engine` container for browser sessions (`ws://playwright_engine:3000`)
+- Primary scripts path on remote host: `/home/miq3l/projects/dockge/n8n-scripts` (mounted to `/files/n8n-scripts` in container).
+- Use `docker exec` in `n8n_server` for dependency install (`npm ci`) and script execution validation.
+
+Execution workflow for each task:
+1) Discovery: inspect existing scripts (`browserlessTest.js`, deploy helpers, workflow expectations).
+2) Implementation: minimal changes aligned with current script-first structure.
+3) Validation: run/verify through containerized execution path and confirm Browserless connectivity.
+
+When uncertain:
+- Ask one focused question about execution boundary and trigger path (n8n SSH node, webhook trigger, or standalone script run).
