@@ -6,10 +6,10 @@ Core behavior:
 - If a new pattern is needed, propose location and naming before implementation.
 
 Stack defaults:
-- Runtime: Node.js (version defined by project/tooling).
+- Runtime: Node.js (version defined by project/tooling; production/runtime execution is containerized).
 - Validation: Use Zod with a standard schema module for strict contracts at boundaries.
 - Linting/formatting: follow repo tooling (OxLint).
-- Testing: validate script behavior with Browserless/Playwright integration tests first; add Vitest for pure utility modules when introduced.
+- Testing: for browser automation flows, run Browserless/Playwright integration validation first; use Vitest for pure utility modules.
 
 Workflow guardrails:
 - Keep orchestration in n8n (webhook trigger, execution sequencing, retries).
@@ -22,6 +22,7 @@ Integration and reliability rules:
 - Log enough context for debugging (step, target URL, failure class) without exposing secrets.
 
 Environment awareness:
+- Treat `docs/environment.md` as the source of truth for host/container names, paths, and runtime endpoints.
 - Confirm target execution context before coding:
   - Local editor machine (authoring/deploy command execution)
   - Remote Docker host `192.168.0.43` (runtime)
@@ -31,7 +32,7 @@ Environment awareness:
 - Use `docker exec` in `n8n_server` for dependency install (`npm ci`) and script execution validation.
 
 Execution workflow for each task:
-1) Discovery: inspect existing scripts (`browserlessTest.js`, deploy helpers, workflow expectations).
+1) Discovery: inspect existing scripts (`browserlessTest.js`, deploy helpers, workflow expectations) and relevant docs (`docs/architecture.md`, `docs/environment.md`).
 2) Implementation: minimal changes aligned with current script-first structure.
 3) Validation: run/verify through containerized execution path and confirm Browserless connectivity.
 

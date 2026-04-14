@@ -5,10 +5,11 @@
 - Local role: edit scripts and run deploy commands from development laptop
 - Remote hosting: Docker containers managed via Dockge
 - Private connectivity: local network/Tailscale as configured
-- Editor/Agent: Cursor + Claude agent
+- Editor/Agent: Cursor agent
 
 ## Runtime and Tooling
-- Node.js runtime: installed in containers (not on remote host directly).
+- Production/runtime execution: Node.js installed in containers.
+- Local Node.js installation is optional for authoring-only checks; containerized execution is authoritative for runtime behavior.
 - Package manager: npm.
 - Dependency install: run `npm ci` inside `n8n_server` via `docker exec`.
 - Lint/test tools: OxLint and script-level connectivity validation with Browserless/Playwright.
@@ -23,6 +24,7 @@
   - Container: `/files/n8n-scripts`
 
 ## Constraint Checklist
+- Treat this file as the source of truth for environment naming and runtime endpoints.
 - Confirm where each task runs:
   - inside n8n execution
   - inside `n8n_server` container

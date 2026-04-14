@@ -34,7 +34,8 @@ This file defines what belongs in n8n workflow configuration, Node scripts, and 
 ## Security and Secrets
 - Store credentials in n8n credentials or platform secret managers.
 - Do not commit secrets to repository files.
-- Keep SSH and webhook-sensitive values out of scripts and docs; inject through n8n credentials/env.
+- Keep SSH keys/tokens/webhook secrets out of scripts and docs; inject through n8n credentials/env.
+- Operational identifiers (for example container names, non-secret host paths, and internal endpoint hostnames) may be documented when needed for runbooks.
 
 ## Refactoring Reference
 Refactoring guidance in this repository is informed by Martin Fowler's *Refactoring (2nd Edition)*, especially:
