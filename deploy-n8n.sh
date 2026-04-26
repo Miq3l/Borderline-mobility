@@ -5,6 +5,7 @@ set -euo pipefail
 # Usage:
 #   ./deploy-n8n.sh
 #   ./deploy-n8n.sh --skip-install
+#   ./deploy-n8n.sh --script scripts/mobilityLoginStart.js --payload-json '{"runId":"manual"}'
 
 SERVER_USER="miq3l"
 SERVER_HOST="192.168.0.43"
@@ -13,12 +14,32 @@ CONTAINER_NAME="n8n_server"
 CONTAINER_DIR="/files/n8n-scripts"
 
 SKIP_INSTALL="false"
-if [[ "${1:-}" == "--skip-install" ]]; then
-  SKIP_INSTALL="true"
-fi
+SCRIPT_PATH="browserlessTest.js"
+PAYLOAD_JSON=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --skip-install)
+      SKIP_INSTALL="true"
+      shift
+      ;;
+    --script)
+      SCRIPT_PATH="${2:-}"
+      shift 2
+      ;;
+    --payload-json)
+      PAYLOAD_JSON="${2:-}"
+      shift 2
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
 
 echo "==> Copying files to ${SERVER_USER}@${SERVER_HOST}:${REMOTE_DIR}"
-scp "browserlessTest.js" "package.json" "package-lock.json" \
+scp -r "browserlessTest.js" "scripts" "package.json" "package-lock.json" \
   "${SERVER_USER}@${SERVER_HOST}:${REMOTE_DIR}/"
 
 if [[ "${SKIP_INSTALL}" != "true" ]]; then
@@ -30,7 +51,12 @@ else
 fi
 
 echo "==> Executing script inside container"
-ssh "${SERVER_USER}@${SERVER_HOST}" \
-  "docker exec ${CONTAINER_NAME} node ${CONTAINER_DIR}/browserlessTest.js"
+if [[ -n "${PAYLOAD_JSON}" ]]; then
+  ssh "${SERVER_USER}@${SERVER_HOST}" \
+    "docker exec ${CONTAINER_NAME} node ${CONTAINER_DIR}/${SCRIPT_PATH} '${PAYLOAD_JSON}'"
+else
+  ssh "${SERVER_USER}@${SERVER_HOST}" \
+    "docker exec ${CONTAINER_NAME} node ${CONTAINER_DIR}/${SCRIPT_PATH}"
+fi
 
 echo "==> Deploy and test completed."

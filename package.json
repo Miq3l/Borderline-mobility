@@ -8,6 +8,7 @@
   "scripts": {
     "deploy": "./deploy-n8n.sh",
     "deploy:fast": "./deploy-n8n.sh --skip-install",
+    "run:mobility": "node scripts/mobilityLoginStart.js",
     "lint": "oxlint .",
     "lint:fix": "oxlint . --fix"
   },
@@ -15,6 +16,7 @@
     "oxlint": "1.59.0"
   },
   "dependencies": {
-    "playwright-core": "^1.59.0"
+    "playwright-core": "^1.59.0",
+    "zod": "^4.3.6"
   }
 }
