@@ -107,6 +107,10 @@ function logEvent(level, step, details = {}) {
   );
 }
 
+function responseTimestamp() {
+  return new Date().toISOString();
+}
+
 async function runAutomation(config) {
   const selectors = {
     ...defaultMobilitySelectors,
@@ -193,6 +197,7 @@ async function main() {
       console.error(
         JSON.stringify({
           status: 'Failed',
+          timestamp: responseTimestamp(),
           failureClass: 'ValidationError',
           message: 'Invalid JSON payload passed as first argument.',
         })
@@ -204,6 +209,7 @@ async function main() {
       console.error(
         JSON.stringify({
           status: 'Failed',
+          timestamp: responseTimestamp(),
           failureClass: 'ValidationError',
           message: 'Input validation failed before starting automation.',
           issues: error.issues.map((issue) => ({
@@ -223,6 +229,7 @@ async function main() {
     console.log(
       JSON.stringify({
         status: 'Success',
+        timestamp: responseTimestamp(),
         runId: config.runId,
         idempotencyKey: config.idempotencyKey ?? null,
         loginUrl: config.loginUrl,
@@ -236,6 +243,7 @@ async function main() {
     console.error(
       JSON.stringify({
         status: 'Failed',
+        timestamp: responseTimestamp(),
         failureClass: classifyError(error),
         runId: config?.runId ?? null,
         targetUrl: config?.postLoginUrl ?? config?.loginUrl ?? null,
@@ -250,6 +258,7 @@ main().catch((error) => {
   console.error(
     JSON.stringify({
       status: 'Failed',
+      timestamp: responseTimestamp(),
       failureClass: classifyError(error),
       message: String(error?.message || error),
     })
